@@ -5,7 +5,11 @@ const app = express();
 app.use(express.json());
 
 // In-memory tasks storage
-const tasks = [];
+const tasks = [
+    { id: uuidv4(), name: "Setup Jenkins", desc: "Install and configure Jenkins on EC2", status: "pending" },
+    { id: uuidv4(), name: "Dockerize App", desc: "Create Dockerfile for Task Manager app", status: "pending" },
+    { id: uuidv4(), name: "CI Pipeline", desc: "Integrate SonarQube and Trivy for CI", status: "pending" }
+];
 
 // Intentional code smell & complexity for SonarQube
 let unusedVar = 123;

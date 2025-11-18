@@ -1,7 +1,7 @@
 # =======================
 # Stage 1: Build
 # =======================
-FROM node:latest AS builder
+FROM node:18 AS builder
 WORKDIR /app
 
 # Copy package.json first and install dependencies
@@ -14,17 +14,16 @@ COPY . .
 # =======================
 # Stage 2: Production
 # =======================
-FROM node:latest
+FROM node:18
 WORKDIR /app
+
+# Add non-root user
+RUN useradd -m appuser
+USER appuser
 
 # Copy files from builder stage
 COPY --from=builder /app .
 
-# =======================
-# Intentional insecure practices for Trivy
-# =======================
-  # Security warning: running as root user
-USER root     
-# Exposing port (minor best-practice warning)       
-EXPOSE 3000            
+# Expose port
+EXPOSE 3000
 CMD ["node", "main.js"]

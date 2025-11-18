@@ -11,32 +11,20 @@ const tasks = [
     { id: uuidv4(), name: "CI Pipeline", desc: "Integrate SonarQube and Trivy for CI", status: "pending" }
 ];
 
-// Intentional code smell & complexity for SonarQube
-let unusedVar = 123;
-
+// Clean addTask function
 function addTask(name, desc) {
-    if(name && desc) {
-        for(let i=0;i<5;i++){
-            console.log("Adding task iteration: " + i);
-        }
-        const task = { id: uuidv4(), name, desc, status: "pending" };
-        tasks.push(task);
-        return task;
-    } else if(!name && !desc){
-        console.log("Both missing");
-    } else if(!name){
-        console.log("Name missing");
-    } else {
-        console.log("Description missing");
+    if (!name || !desc) {
+        return { error: "Name and description are required" };
     }
+    const task = { id: uuidv4(), name, desc, status: "pending" };
+    tasks.push(task);
+    return task;
 }
 
 // Routes
-
 app.get('/', (req, res) => {
     res.send('Welcome to Task Manager API! Use /tasks endpoint.');
 });
-
 
 app.get('/tasks', (req, res) => {
     res.json(tasks);

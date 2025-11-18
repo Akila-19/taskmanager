@@ -1,7 +1,7 @@
 # =======================
 # Stage 1: Build
 # =======================
-FROM node:18 AS builder
+FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy package.json first and install dependencies
@@ -14,11 +14,11 @@ COPY . .
 # =======================
 # Stage 2: Production
 # =======================
-FROM node:18
+FROM node:18-alpine
 WORKDIR /app
 
 # Add non-root user
-RUN useradd -m appuser
+RUN adduser -D appuser
 USER appuser
 
 # Copy files from builder stage

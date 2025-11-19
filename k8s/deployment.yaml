@@ -1,0 +1,25 @@
+# taskmanager-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taskmanager-app
+  namespace: taskmanager
+  labels:
+    app: taskmanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: taskmanager
+  template:
+    metadata:
+      labels:
+        app: taskmanager
+    spec:
+      containers:
+        - name: taskmanager-container
+          image: akila1908/my-taskmanager-app:BUILD_NUMBER
+          ports:
+            - containerPort: 3000
+      # imagePullSecrets:
+        # - name: dockerhub-secret

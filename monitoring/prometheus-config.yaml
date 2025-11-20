@@ -1,4 +1,3 @@
-# prometheus-config.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,6 +8,18 @@ data:
     global:
       scrape_interval: 15s
     scrape_configs:
-      - job_name: 'taskmanager-app'
+      - job_name: 'prometheus'
         static_configs:
-          - targets: ['taskmanager-service.taskmanager.svc.cluster.local:3000'] 
+          - targets: ['localhost:9090']
+      - job_name: 'taskmanager-app'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            action: keep
+            regex: taskmanager
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            target_label: __address__
+            regex: (.+):3000;(.+)
+            replacement: $1:3000

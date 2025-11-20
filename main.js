@@ -37,6 +37,8 @@ app.post('/tasks', (req, res) => {
 });
 
 const port = 3000;
-app.listen(port, () => {
-    console.log(`Task Manager API running at http://localhost:${port}`);
+const host = '0.0.0.0'; // Explicitly bind to all network interfaces
+
+app.listen(port, host, () => {
+    console.log(`Task Manager API running at http://${host}:${port}`);
 });

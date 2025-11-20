@@ -1,14 +1,12 @@
-# taskmanager-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: taskmanager-service
-  namespace: taskmanager
 spec:
+  type: NodePort # Use NodePort for easy access in KK/local clusters
   selector:
-    app: taskmanager
+    app: taskmanager # Must match the label in deployment.yaml
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
-  type: ClusterIP
+    - port: 80 # Service port (internal cluster access)
+      targetPort: 3000 # The port your Node.js app listens on
+      nodePort: 30080 # The external port on the cluster nodes (30000-32767 range)

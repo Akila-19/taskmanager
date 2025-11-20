@@ -1,17 +1,4 @@
-# taskmanager-namespace.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
   name: taskmanager
----
-# argocd-namespace.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: argocd
----
-# monitoring-namespace.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: monitoring

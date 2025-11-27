@@ -13,13 +13,22 @@ data:
           - targets: ['localhost:9090']
       - job_name: 'taskmanager-app'
         kubernetes_sd_configs:
-          - role: pod
+          - role: endpoints
+            namespaces:
+              names: ['default'] 
         relabel_configs:
-          - source_labels: [__meta_kubernetes_pod_label_app]
+          # 1. Keep only targets associated with the 'taskmanager-app' service name
+          - source_labels: [__meta_kubernetes_service_name]
+            regex: taskmanager-app
             action: keep
-            regex: taskmanager
-          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
-            action: replace
-            target_label: __address__
-            regex: (.+):3000;(.+)
-            replacement: $1:3000
+            
+          # 2. Keep only the target port we want to scrape (e.g., the port named 'http-metrics' or similar)
+          - source_labels: [__meta_kubernetes_endpoint_port_name]
+            regex: http-metrics
+            action: keep
+            
+          # 3. Explicitly set the path to /metrics
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            regex: (.*)
+            target_label: __metrics_path__
+            replacement: /metrics

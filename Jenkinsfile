@@ -75,7 +75,7 @@ pipeline {
                     sh "git commit -am 'Deployment: Update TaskManager image to build ${BUILD_NUMBER}'"
                     
                     // Push the change to the GITOPS branch using credentials
-                    withCredentials([usernamePassword(credentialsId: 'git-cred', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'git-creds', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Akila-19/taskmanager.git ${GITOPS_BRANCH}"
                     }
                 }

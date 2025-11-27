@@ -19,6 +19,6 @@ spec:
       - name: taskmanager-container
         # !! IMPORTANT: THIS TAG IS A PLACEHOLDER !!
         # Jenkins will replace this tag with the actual BUILD_NUMBER.
-        image: akila1908/my-taskmanager-app:PLACEHOLDER
+        image: akila1908/my-taskmanager-app:8
         ports:
         - containerPort: 3000

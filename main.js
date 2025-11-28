@@ -10,7 +10,8 @@ const tasks = [
     { id: uuidv4(), name: "Dockerize App", desc: "Create Dockerfile for Task Manager app", status: "pending" },
     { id: uuidv4(), name: "CI Pipeline", desc: "Integrate SonarQube and Trivy for CI", status: "pending" }
 ];
-
+const client = require('prom-client');
+client.collectDefaultMetrics(); // CPU, Memory, Event Loop, etc.
 // Clean addTask function
 function addTask(name, desc) {
     if (!name || !desc) {
@@ -40,5 +41,5 @@ const port = 3000;
 const host = '0.0.0.0'; // Explicitly bind to all network interfaces
 
 app.listen(port, host, () => {
-    console.log(`Task Manager API running at http://${host}:${port}`);
+    console.log(`This is my DevOps project. Task Manager API running at http://${host}:${port}`);
 });

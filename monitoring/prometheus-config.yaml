@@ -20,7 +20,7 @@ data:
           # 1. Keep only targets associated with the 'taskmanager-app' service
           # This ensures we only scrape the correct application.
           - source_labels: [__meta_kubernetes_service_name]
-            regex: taskmanager-app
+            regex: taskmanager-service
             action: keep
             
           # 2. Add Namespace Label (This makes the 'kubernetes_namespace' label appear in Grafana)

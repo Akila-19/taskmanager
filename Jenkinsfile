@@ -67,7 +67,7 @@ pipeline {
                     ])
                     
                     // ⚠️ FIX: Create a local branch reference for the push command
-                    sh "git checkout -b ${GITOPS_BRANCH}"
+                    sh "git checkout -B ${GITOPS_BRANCH}"
                     
                     // Update the image tag in the deployment file
                     sh "sed -i 's|${DOCKER_IMAGE}:.*|${DOCKER_IMAGE}:${BUILD_NUMBER}|' ${MANIFEST_PATH}"

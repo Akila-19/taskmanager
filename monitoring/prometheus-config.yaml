@@ -22,6 +22,12 @@ data:
           - source_labels: [__meta_kubernetes_service_name]
             regex: taskmanager-service
             action: keep
+
+          - source_labels: [__address__]
+            regex: '(.+):(\d+)'
+            replacement: '$1:3000'
+            target_label: '__address__'
+            action: 'replace'
             
           # 2. Add Namespace Label (This makes the 'kubernetes_namespace' label appear in Grafana)
           # We explicitly define the namespace label to be added to the metrics.

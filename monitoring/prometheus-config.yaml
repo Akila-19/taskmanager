@@ -1,43 +1,102 @@
-apiVersion: v1
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: prometheus-config
+#   namespace: monitoring
+# data:
+#   prometheus.yml: |
+    # global:
+    #   scrape_interval: 15s
+    # scrape_configs:
+    #   - job_name: 'prometheus'
+    #     static_configs:
+    #       - targets: ['localhost:9090']
+    #   - job_name: 'taskmanager-app'
+    #     kubernetes_sd_configs:
+    #       - role: endpoints # FIX 1: Changed from 'pod' to 'endpoints'
+    #         namespaces:
+    #           names: ['taskmanager'] # FIX 2: Changed from 'default' to 'taskmanager'
+    #     relabel_configs:
+    #       # 1. Keep only targets associated with the 'taskmanager-app' service
+    #       # This ensures we only scrape the correct application.
+    #       - source_labels: [__meta_kubernetes_service_name]
+    #         regex: taskmanager-service
+    #         action: keep
+
+    #       - source_labels: [__address__]
+    #         regex: '(.+):(\d+)'
+    #         replacement: '$1:3000'
+    #         target_label: '__address__'
+    #         action: 'replace'
+            
+    #       # 2. Add Namespace Label (This makes the 'kubernetes_namespace' label appear in Grafana)
+    #       # We explicitly define the namespace label to be added to the metrics.
+    #       - source_labels: [__meta_kubernetes_namespace]
+    #         target_label: kubernetes_namespace
+    #         action: replace
+
+    #       # 3. Explicitly set the metrics path to /metrics
+    #       # This ensures Prometheus knows where to find the application's metrics data.
+    #       - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+    #         regex: (.*)
+    #         target_label: __metrics_path__
+    #         replacement: /metrics
+
+
+    apiVersion: v1
 kind: ConfigMap
 metadata:
   name: prometheus-config
-  namespace: monitoring
+  namespace: monitoring # Assuming 'monitoring' is your Prometheus namespace
 data:
+  # The entire prometheus.yml content is indented 
+  # by two spaces relative to the 'prometheus.yml: |' key.
   prometheus.yml: |
     global:
+      # The interval at which targets are scraped
       scrape_interval: 15s
+      # The interval at which rules (alerts, recordings) are evaluated
+      evaluation_interval: 15s
+
     scrape_configs:
+      # 1. Prometheus Server Self-Scrape
       - job_name: 'prometheus'
         static_configs:
           - targets: ['localhost:9090']
+
+      # 2. Application Scrape Job (taskmanager)
       - job_name: 'taskmanager-app'
         kubernetes_sd_configs:
-          - role: endpoints # FIX 1: Changed from 'pod' to 'endpoints'
+          - role: endpoints
             namespaces:
-              names: ['taskmanager'] # FIX 2: Changed from 'default' to 'taskmanager'
+              # Targets the specific namespace
+              names: ['taskmanager']
+              
         relabel_configs:
-          # 1. Keep only targets associated with the 'taskmanager-app' service
-          # This ensures we only scrape the correct application.
+          # Filter 1: Keep only endpoints linked to the Service named 'taskmanager-service'
           - source_labels: [__meta_kubernetes_service_name]
             regex: taskmanager-service
             action: keep
-
+          
+          # Rewrite Address: Change the port to the application's metrics port (3000)
           - source_labels: [__address__]
             regex: '(.+):(\d+)'
             replacement: '$1:3000'
             target_label: '__address__'
-            action: 'replace'
-            
-          # 2. Add Namespace Label (This makes the 'kubernetes_namespace' label appear in Grafana)
-          # We explicitly define the namespace label to be added to the metrics.
+            action: replace
+
+          # Labeling 1: Set 'kubernetes_namespace' label
           - source_labels: [__meta_kubernetes_namespace]
             target_label: kubernetes_namespace
             action: replace
-
-          # 3. Explicitly set the metrics path to /metrics
-          # This ensures Prometheus knows where to find the application's metrics data.
+            
+          # Labeling 2: Use the Pod Name as the 'instance' label
+          - source_labels: [__meta_kubernetes_pod_name]
+            target_label: instance
+            action: replace
+            
+          # Labeling 3: Set the metrics path (based on pod annotation)
           - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
-            regex: (.*)
+            regex: (.+)
             target_label: __metrics_path__
-            replacement: /metrics
+            action: replace

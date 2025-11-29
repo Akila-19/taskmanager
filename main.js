@@ -30,7 +30,10 @@ app.get('/', (req, res) => {
 app.get('/tasks', (req, res) => {
     res.json(tasks);
 });
-
+app.get('/metrics', async (req, res) => {
+    res.set('Content-Type', client.register.contentType);
+    res.end(await client.register.metrics());
+});
 app.post('/tasks', (req, res) => {
     const { name, desc } = req.body;
     const task = addTask(name, desc);

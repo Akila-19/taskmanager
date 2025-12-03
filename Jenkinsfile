@@ -35,15 +35,10 @@ pipeline {
         }
         
         // Pipeline now proceeds immediately after analysis submission
-        stage('Build & Push Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 script {
                     def img = docker.build("${DOCKER_IMAGE}:${BUILD_NUMBER}")
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
-                        img.push() 
-                        img.tag('latest')
-                        img.push('latest')
-                    }
                 }
             }
         }
@@ -54,6 +49,17 @@ pipeline {
                 archiveArtifacts artifacts: 'trivy_report.txt', fingerprint: true
             }
         }
+        stage('Push Docker Image') {
+    steps {
+        script {
+            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
+                img.push()
+                img.tag('latest')
+                img.push('latest')
+            }
+        }
+    }
+}
         
         // --- CD STAGE: UPDATING GITOPS BRANCH ---
         stage('CD: Update Manifest (GitOps Trigger)') {

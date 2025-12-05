@@ -9,7 +9,7 @@ pipeline {
         GITOPS_BRANCH = 'gitops'
         MANIFEST_PATH = 'k8s/deployment.yaml' 
     }
-
+    def img
     stages {
         stage('Checkout Code') { steps { git branch: 'main', url: "${GITOPS_REPO}" } }
         

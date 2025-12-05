@@ -33,19 +33,11 @@ pipeline {
                 // The 'waitForQualityGate' step has been removed/skipped.
             }
         }
-         stage('Initialize Docker Image') {
-            steps {
-                script {
-                    // Declare img globally so it can be used in other stages
-                    img = null
-                }
-            }
-        }
         // Pipeline now proceeds immediately after analysis submission
         stage('Build Docker Image') {
             steps {
                 script {
-                    img = docker.build("${DOCKER_IMAGE}:${BUILD_NUMBER}")
+                     docker.build("${DOCKER_IMAGE}:${BUILD_NUMBER}")
                 }
             }
         }
@@ -60,8 +52,8 @@ pipeline {
     steps {
         script {
             docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
+                def img = docker.image("${DOCKER_IMAGE}:${BUILD_NUMBER}")
                 img.push()
-                img.tag('latest')
                 img.push('latest')
             }
         }

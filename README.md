@@ -4,7 +4,8 @@ A complete automated CI/CD pipeline that deploys a Node.js application from code
 
 ## Overview
 
-This project implements a production-ready DevOps pipeline that automates the entire software delivery process. Code pushed to GitHub automatically builds, tests, scans for vulnerabilities, and deploys to Kubernetes—all in under 10 minutes.
+This project implements a production-ready DevOps pipeline that automates the entire software delivery process. Code pushed to GitHub automatically builds, tests, scans for vulnerabilities, and deploys to Kubernetes.
+
 <img width="1161" height="615" alt="taskmanager_architecture drawio (1)" src="https://github.com/user-attachments/assets/4b47cb1e-97c0-49c5-9b73-f1ad9bc24563" />
 
 
@@ -61,14 +62,6 @@ The pipeline has three layers:
 
 This separation enables GitOps workflow where infrastructure changes are version-controlled.
 
-## Results
-
-| Metric | Before | After |
-|--------|--------|-------|
-| Deployment Time | 2-3 hours | 8-10 minutes |
-| Manual Steps | 15+ | 0 |
-| Security Coverage | Manual | 100% automated |
-| Rollback Time | 30+ minutes | Instant (Git revert) |
 
 ## What I Learned
 
@@ -94,7 +87,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-**LinkedIn**: [Your Profile](www.linkedin.com/in/akilandeshwari-srinivasan)  
+**LinkedIn**: [Akilandeshwari Srinivasan](www.linkedin.com/in/akilandeshwari-srinivasan)  
 **GitHub**: [@Akila-19](https://github.com/Akila-19)  
 
 ---

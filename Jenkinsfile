@@ -9,7 +9,7 @@ pipeline {
         GITOPS_BRANCH = 'gitops'
         MANIFEST_PATH = 'k8s/deployment.yaml' 
     }
-    def img
+
     stages {
         stage('Checkout Code') { steps { git branch: 'main', url: "${GITOPS_REPO}" } }
         
@@ -33,7 +33,14 @@ pipeline {
                 // The 'waitForQualityGate' step has been removed/skipped.
             }
         }
-        
+         stage('Initialize Docker Image') {
+            steps {
+                script {
+                    // Declare img globally so it can be used in other stages
+                    img = null
+                }
+            }
+        }
         // Pipeline now proceeds immediately after analysis submission
         stage('Build Docker Image') {
             steps {

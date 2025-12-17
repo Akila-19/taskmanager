@@ -79,7 +79,7 @@ This separation enables GitOps workflow where infrastructure changes are version
 
 ## Documentation
 
-For detailed setup instructions and implementation guide, check out my [Medium article](your-article-link).
+For detailed setup instructions and implementation guide, check out my [Medium article](https://medium.com/@akila98sri/building-a-complete-ci-cd-pipeline-step-by-step-guide-f79f597ae137).
 
 ## License
 
